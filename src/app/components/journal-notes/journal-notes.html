@@ -1,0 +1,35 @@
+<form (ngSubmit)="submitForm()">
+  <input type="radio" name="emotionalState" id="bra" value="Bra" [(ngModel)]="emotionalState" />
+  <label for="bra">Bra</label>
+
+  <input type="radio" name="emotionalState" id="sadar" value="Sådär" [(ngModel)]="emotionalState" />
+  <label for="sadar">Sådär</label>
+
+  <input
+    type="radio"
+    name="emotionalState"
+    id="daligt"
+    value="Dåligt"
+    [(ngModel)]="emotionalState"
+  />
+  <label for="daligt">Dåligt</label>
+
+  <input
+    type="radio"
+    name="emotionalState"
+    id="vet_ej"
+    value="Vet ej"
+    [(ngModel)]="emotionalState"
+  />
+  <label for="vet_ej">Vet ej</label>
+
+  <br /><br />
+
+  <input type="text" [(ngModel)]="journalEntry" name="journalEntry" />
+  <button type="submit">Submit</button>
+</form>
+
+<br />
+<p>{{ emotionalState }}</p>
+<p>{{ journalEntry }}</p>
+<p>{{ postJournal }}</p>
