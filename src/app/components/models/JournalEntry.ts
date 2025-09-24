@@ -1,4 +1,4 @@
-type JournalEntry = {
+export type JournalEntry = {
   id: number;
   title: string;
   content: string;

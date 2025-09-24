@@ -30,6 +30,13 @@
 </form>
 
 <br />
-<p>{{ emotionalState }}</p>
-<p>{{ journalEntry }}</p>
-<p>{{ postJournal }}</p>
+
+<ul>
+  @for (item of tempJournalList; track $index) {
+  <li>
+    <h3>{{ item.title }}</h3>
+    <p>{{ item.content }}</p>
+    <p>{{ item.createdAt }}</p>
+  </li>
+  }
+</ul>
