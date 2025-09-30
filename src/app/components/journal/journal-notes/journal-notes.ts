@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { JournalEntry } from '../models/JournalEntry';
+import { JournalEntry } from '../../models/JournalEntry';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { JournalService } from '../journal-service/journal-service';

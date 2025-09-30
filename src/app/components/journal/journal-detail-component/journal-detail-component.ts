@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { JournalEntry } from '../models/JournalEntry';
+import { JournalEntry } from '../../models/JournalEntry';
 import { ActivatedRoute } from '@angular/router';
 import { JournalService } from '../journal-service/journal-service';
 import { CommonModule } from '@angular/common';

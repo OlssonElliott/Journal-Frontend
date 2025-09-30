@@ -1,9 +1,12 @@
 import { Routes } from '@angular/router';
-import { JournalService } from './components/journal-service/journal-service';
-import { JournalNotes } from './components/journal-notes/journal-notes';
-import { JournalDetailComponent } from './components/journal-detail-component/journal-detail-component';
+import { JournalDetailComponent } from './components/journal/journal-detail-component/journal-detail-component';
+import { Login } from './components/login/login';
+import { loginGuardGuard } from './components/guard/login-guard-guard';
+import { JournalNotes } from './components/journal/journal-notes/journal-notes';
 
 export const routes: Routes = [
-  { path: '', component: JournalNotes },
-  { path: 'journal/:id', component: JournalDetailComponent },
+  { path: '', pathMatch: 'full', redirectTo: 'login' },
+  { path: 'login', component: Login },
+  { path: 'journal', canActivate: [loginGuardGuard], component: JournalNotes },
+  { path: 'journal/:id', canActivate: [loginGuardGuard], component: JournalDetailComponent },
 ];

@@ -1,5 +1,5 @@
 import { Component, Injectable } from '@angular/core';
-import { JournalEntry } from '../models/JournalEntry';
+import { JournalEntry } from '../../models/JournalEntry';
 
 @Injectable({ providedIn: 'root' })
 export class JournalService {
