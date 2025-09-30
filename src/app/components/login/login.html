@@ -1,0 +1,15 @@
+<form (ngSubmit)="submit()" #loginForm="ngForm">
+  <label>
+    Användarnamn
+    <input name="username" [(ngModel)]="credentials.username" required />
+  </label>
+
+  <label>
+    Lösenord
+    <input type="password" name="password" [(ngModel)]="credentials.password" required />
+  </label>
+
+  <button type="submit" [disabled]="loginForm.invalid">Logga in</button>
+
+  <p *ngIf="error">{{ error }}</p>
+</form>

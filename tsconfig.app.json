@@ -5,8 +5,10 @@
   "compilerOptions": {
     "outDir": "./out-tsc/app",
     "types": [
-      "node"
+      "node",
+      "vite/client"
     ]
+    
   },
   "include": [
     "src/**/*.ts"
