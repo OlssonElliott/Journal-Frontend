@@ -34,7 +34,7 @@ export class JournalNotes {
     private journalService: JournalService,
     private auth: AuthService,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {}
 
   async submitForm() {
@@ -45,8 +45,13 @@ export class JournalNotes {
     this.loading = true;
     this.error = '';
     try {
+      const now = new Date();
       const entry = await this.journalService.createEntry({
-        title: `Journal - ${new Date().toLocaleDateString()}`,
+        title: `Journal - ${now.toLocaleDateString('sv-SE', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        })}`,
         content: this.journalEntry.trim(),
         emotionalState: this.emotionalState,
       });
@@ -91,7 +96,7 @@ export class JournalNotes {
     await this.router.navigate(['/login']);
   }
 
-  // Synkar filtrerad lista, samt statistik när data eller filtret förändras.
+  // Håller den filtrerade listan och statistiken i synk när data eller filter ändras.
   private updateFilteredEntries() {
     const start = this.filterStart ? new Date(this.filterStart) : undefined;
     const end = this.filterEnd ? new Date(this.filterEnd) : undefined;
@@ -110,7 +115,7 @@ export class JournalNotes {
     this.cdr.markForCheck();
   }
 
-  // Lägger ihop känslo-input i procent värden för statistik tabellen.
+  // Räknar hur stor andel varje känslotagg står för i den filtrerade listan.
   private calculateStats(entries: JournalEntry[]): EmotionStat[] {
     if (!entries.length) return [];
 
@@ -128,5 +133,11 @@ export class JournalNotes {
         percentage: Math.round((count / total) * 10000) / 100,
       }))
       .sort((a, b) => b.count - a.count);
+  }
+
+  refreshEntry(updated: JournalEntry) {
+    this.journalService.updateEntry(updated);
+    this.JournalsList = this.journalService.getEntries();
+    this.updateFilteredEntries();
   }
 }

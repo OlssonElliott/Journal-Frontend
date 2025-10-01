@@ -4,7 +4,7 @@ import { AuthService } from '../../auth/auth-service';
 
 @Injectable({ providedIn: 'root' })
 export class JournalService {
-  private baseUrl = import.meta.env[`VITE_API_BASE_URL`] ?? 'http://localhost:8080';
+  private baseUrl = import.meta.env['VITE_API_BASE_URL'] ?? 'http://localhost:8080';
   private journalEntries: JournalEntry[] = [];
 
   constructor(private auth: AuthService) {}
@@ -52,6 +52,12 @@ export class JournalService {
 
   clearEntries() {
     this.journalEntries = [];
+  }
+
+  updateEntry(updated: JournalEntry) {
+    this.journalEntries = this.sortEntries(
+      this.journalEntries.map((entry) => (entry.id === updated.id ? updated : entry)),
+    );
   }
 
   // Sorterar inlägg efter nyaste först, skapta inlägg hamnar överst.
