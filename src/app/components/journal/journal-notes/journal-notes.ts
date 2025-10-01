@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { DatePipe } from '@angular/common';
 import { JournalEntry } from '../../models/JournalEntry';
 import { AuthService } from '../../auth/auth-service';
 import { JournalService } from '../journal-service/journal-service';
@@ -8,7 +9,7 @@ import { JournalService } from '../journal-service/journal-service';
 @Component({
   selector: 'app-journal-notes',
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, DatePipe],
   templateUrl: './journal-notes.html',
   styleUrl: './journal-notes.css',
 })
@@ -18,6 +19,9 @@ export class JournalNotes {
   emotionalState = '';
   journalEntry = '';
   JournalsList: JournalEntry[] = [];
+  filteredEntries: JournalEntry[] = [];
+  filterStart = '';
+  filterEnd = '';
 
   constructor(
     private journalService: JournalService,
@@ -41,11 +45,13 @@ export class JournalNotes {
         emotionalState: this.emotionalState,
       });
       this.JournalsList = [...this.JournalsList, entry];
+      this.journalEntry = '';
+      this.emotionalState = '';
     } catch (err) {
       this.error = 'Kunde inte spara journalinlägget.';
     } finally {
       this.loading = false;
-      this.cdr.markForCheck();
+      this.updateFilteredEntries();
     }
   }
 
@@ -57,14 +63,42 @@ export class JournalNotes {
       this.error = 'Kunde inte hämta journaler.';
     } finally {
       this.loading = false;
-      this.cdr.markForCheck();
+      this.updateFilteredEntries();
     }
+  }
+
+  applyDateFilter() {
+    this.updateFilteredEntries();
+  }
+
+  clearFilter() {
+    this.filterStart = '';
+    this.filterEnd = '';
+    this.updateFilteredEntries();
   }
 
   async logout() {
     this.auth.logout();
     this.journalService.clearEntries();
     this.JournalsList = [];
+    this.updateFilteredEntries();
     await this.router.navigate(['/login']);
+  }
+
+  private updateFilteredEntries() {
+    const start = this.filterStart ? new Date(this.filterStart) : undefined;
+    const end = this.filterEnd ? new Date(this.filterEnd) : undefined;
+
+    if (start) start.setHours(0, 0, 0, 0);
+    if (end) end.setHours(23, 59, 59, 999);
+
+    this.filteredEntries = this.JournalsList.filter((entry) => {
+      const created = entry.createdAt;
+      if (start && created < start) return false;
+      if (end && created > end) return false;
+      return true;
+    });
+
+    this.cdr.markForCheck();
   }
 }
