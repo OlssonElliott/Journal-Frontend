@@ -44,6 +44,30 @@
   <button type="button" (click)="clearFilter()">Rensa filter</button>
 </section>
 
+@if (stats.length) {
+  <section>
+    <h3>Statistik för vald period</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Känsla</th>
+          <th>Antal</th>
+          <th>Andel</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (stat of stats; track stat.emotionalState) {
+          <tr>
+            <td>{{ stat.emotionalState }}</td>
+            <td>{{ stat.count }}</td>
+            <td>{{ stat.percentage }} %</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </section>
+}
+
 <ul>
   @for (item of filteredEntries; track item.id) {
     <li>
@@ -51,7 +75,7 @@
         <h3>{{ item.title }}</h3>
       </a>
       <p>{{ item.content }}</p>
-      <p>{{ item.createdAt | date: 'yyyy-MM-dd HH:mm' }}</p>
+      <p>{{ item.createdAt | date: "d MMMM yyyy 'klockan' HH:mm" }}</p>
     </li>
   }
 </ul>

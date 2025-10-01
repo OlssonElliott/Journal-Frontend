@@ -9,6 +9,7 @@ export class JournalService {
 
   constructor(private auth: AuthService) {}
 
+  //Laddar de senaste posterna för inloggad användare och uppdaterar sorterad kopia.
   async loadJournalEntries(): Promise<JournalEntry[]> {
     const userId = this.auth.getUserId();
     if (!userId) throw new Error('Ingen användare inloggad.');
@@ -53,10 +54,12 @@ export class JournalService {
     this.journalEntries = [];
   }
 
+  // Sorterar inlägg efter nyaste först, skapta inlägg hamnar överst.
   private sortEntries(entries: JournalEntry[]): JournalEntry[] {
     return [...entries].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
 
+  // Normaliserar payloaden från backend till JournalEntry-objekt. Annars problem att skriva ut.
   private normalize(raw: any): JournalEntry {
     return {
       id: String(raw.id ?? raw._id),

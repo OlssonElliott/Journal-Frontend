@@ -6,6 +6,12 @@ import { JournalEntry } from '../../models/JournalEntry';
 import { AuthService } from '../../auth/auth-service';
 import { JournalService } from '../journal-service/journal-service';
 
+type EmotionStat = {
+  emotionalState: string;
+  count: number;
+  percentage: number;
+};
+
 @Component({
   selector: 'app-journal-notes',
   standalone: true,
@@ -22,16 +28,16 @@ export class JournalNotes {
   filteredEntries: JournalEntry[] = [];
   filterStart = '';
   filterEnd = '';
+  stats: EmotionStat[] = [];
 
   constructor(
     private journalService: JournalService,
     private auth: AuthService,
     private router: Router,
-    private cdr: ChangeDetectorRef,
+    private cdr: ChangeDetectorRef
   ) {}
 
   async submitForm() {
-    // validerar inputfält, sedan anropar journalService.
     if (!this.emotionalState || !this.journalEntry) {
       this.error = 'Fyll i alla fält innan du sparar!';
       return;
@@ -85,6 +91,7 @@ export class JournalNotes {
     await this.router.navigate(['/login']);
   }
 
+  // Synkar filtrerad lista, samt statistik när data eller filtret förändras.
   private updateFilteredEntries() {
     const start = this.filterStart ? new Date(this.filterStart) : undefined;
     const end = this.filterEnd ? new Date(this.filterEnd) : undefined;
@@ -99,6 +106,27 @@ export class JournalNotes {
       return true;
     });
 
+    this.stats = this.calculateStats(this.filteredEntries);
     this.cdr.markForCheck();
+  }
+
+  // Lägger ihop känslo-input i procent värden för statistik tabellen.
+  private calculateStats(entries: JournalEntry[]): EmotionStat[] {
+    if (!entries.length) return [];
+
+    const counts = new Map<string, number>();
+    for (const entry of entries) {
+      const key = entry.emotionalState ?? 'Okänd';
+      counts.set(key, (counts.get(key) ?? 0) + 1);
+    }
+
+    const total = entries.length;
+    return Array.from(counts.entries())
+      .map(([emotionalState, count]) => ({
+        emotionalState,
+        count,
+        percentage: Math.round((count / total) * 10000) / 100,
+      }))
+      .sort((a, b) => b.count - a.count);
   }
 }
