@@ -1,8 +1,8 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { JournalEntry } from '../../models/JournalEntry';
-
-import { RouterLink } from '@angular/router';
+import { AuthService } from '../../auth/auth-service';
 import { JournalService } from '../journal-service/journal-service';
 
 @Component({
@@ -18,6 +18,13 @@ export class JournalNotes {
   emotionalState = '';
   journalEntry = '';
   JournalsList: JournalEntry[] = [];
+
+  constructor(
+    private journalService: JournalService,
+    private auth: AuthService,
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   async submitForm() {
     // validerar inputfält, sedan anropar journalService.
@@ -38,22 +45,26 @@ export class JournalNotes {
       this.error = 'Kunde inte spara journalinlägget.';
     } finally {
       this.loading = false;
-      this.cdr.markForCheck(); // söker efter ändringar så listan skrivs ut.
+      this.cdr.markForCheck();
     }
   }
-
-  constructor(private journalService: JournalService, private cdr: ChangeDetectorRef) {}
 
   async ngOnInit() {
     this.loading = true;
     try {
       this.JournalsList = await this.journalService.loadJournalEntries();
-      console.log('JournalNotes list', this.JournalsList);
     } catch (err) {
       this.error = 'Kunde inte hämta journaler.';
     } finally {
       this.loading = false;
       this.cdr.markForCheck();
     }
+  }
+
+  async logout() {
+    this.auth.logout();
+    this.journalService.clearEntries();
+    this.JournalsList = [];
+    await this.router.navigate(['/login']);
   }
 }

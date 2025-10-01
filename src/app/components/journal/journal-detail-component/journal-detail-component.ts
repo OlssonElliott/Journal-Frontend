@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { JournalEntry } from '../../models/JournalEntry';
-import { ActivatedRoute } from '@angular/router';
+import { AuthService } from '../../auth/auth-service';
 import { JournalService } from '../journal-service/journal-service';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-journal-detail-component',
@@ -16,15 +16,25 @@ export class JournalDetailComponent {
   journalEntry?: JournalEntry;
   notFound = false;
 
-  //visar endast detaljsida om id finns
-  constructor(route: ActivatedRoute, journalService: JournalService) {
-    const id = String(route.snapshot.paramMap.get('id'));
+  constructor(
+    route: ActivatedRoute,
+    private journalService: JournalService,
+    private auth: AuthService,
+    private router: Router,
+  ) {
+    const id = route.snapshot.paramMap.get('id');
     if (!id) {
       this.notFound = true;
       return;
     }
 
-    this.journalEntry = journalService.getEntryById(id);
+    this.journalEntry = this.journalService.getEntryById(id);
     this.notFound = !this.journalEntry;
+  }
+
+  async logout() {
+    this.auth.logout();
+    this.journalService.clearEntries();
+    await this.router.navigate(['/login']);
   }
 }

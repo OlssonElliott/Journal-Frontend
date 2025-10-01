@@ -1,13 +1,14 @@
-<p>journal-detail-component works!</p>
+<button type="button" (click)="logout()">Logga ut</button>
+
 @if (notFound) {
-<p>Inlägget kunde inte hittas.</p>
-<a routerLink="/journal">Tillbaka</a>
+  <p>Inlägget kunde inte hittas.</p>
+  <a routerLink="/journal">Tillbaka</a>
 } @else if (journalEntry) {
-<article>
-  <h2>{{ journalEntry.title }}</h2>
-  <p>{{ journalEntry.createdAt | date : 'yyyy-MM-dd HH:mm' }}</p>
-  <p>{{ journalEntry.content }}</p>
-  <p>Känsla: {{ journalEntry.emotionalState }}</p>
-</article>
-<a routerLink="/journal">Tillbaka till listan</a>
+  <article>
+    <h2>{{ journalEntry.title }}</h2>
+    <p>{{ journalEntry.createdAt | date: 'yyyy-MM-dd HH:mm' }}</p>
+    <p>{{ journalEntry.content }}</p>
+    <p>Känsla: {{ journalEntry.emotionalState }}</p>
+  </article>
+  <a routerLink="/journal">Tillbaka till listan</a>
 }

@@ -1,15 +1,43 @@
-<form (ngSubmit)="submit()" #loginForm="ngForm">
-  <label>
-    Användarnamn
-    <input name="username" [(ngModel)]="credentials.username" required />
-  </label>
+<form (ngSubmit)="submit(loginForm)" #loginForm="ngForm">
+  @if (!isRegistering) {
+    <label>
+      Användarnamn
+      <input name="username" [(ngModel)]="credentials.username" required />
+    </label>
 
-  <label>
-    Lösenord
-    <input type="password" name="password" [(ngModel)]="credentials.password" required />
-  </label>
+    <label>
+      Lösenord
+      <input type="password" name="password" [(ngModel)]="credentials.password" required />
+    </label>
+  } @else {
+    <label>
+      Användarnamn
+      <input name="username" [(ngModel)]="registerData.username" required />
+    </label>
 
-  <button type="submit" [disabled]="loginForm.invalid">Logga in</button>
+    <label>
+      E-post
+      <input type="email" name="email" [(ngModel)]="registerData.email" required />
+    </label>
+
+    <label>
+      Lösenord
+      <input type="password" name="password" [(ngModel)]="registerData.password" required />
+    </label>
+
+    <label>
+      Bekräfta lösenord
+      <input type="password" name="confirmPassword" [(ngModel)]="registerData.confirmPassword" required />
+    </label>
+  }
+
+  <button type="submit" [disabled]="loginForm.invalid || loading">
+    {{ isRegistering ? 'Skapa konto' : 'Logga in' }}
+  </button>
+
+  <button type="button" (click)="toggleMode(loginForm)">
+    {{ isRegistering ? 'Gå till login' : 'Skapa konto' }}
+  </button>
 
   @if (error) {
     <p>{{ error }}</p>

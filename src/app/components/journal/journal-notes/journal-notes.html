@@ -1,3 +1,5 @@
+<button type="button" (click)="logout()">Logga ut</button>
+
 <form (ngSubmit)="submitForm()">
   <input type="radio" name="emotionalState" id="bra" value="Bra" [(ngModel)]="emotionalState" />
   <label for="bra">Bra</label>
@@ -33,12 +35,10 @@
 
 <ul>
   @for (item of JournalsList; track item.id) {
-  <li>
-    <a [routerLink]="['/journal', item.id]">
-      <h3>{{ item.title }}</h3>
-    </a>
-    <p>{{ item.content }}</p>
-    <p>{{ item.createdAt }}</p>
-  </li>
+    <li>
+      <a [routerLink]="['/journal', item.id]">
+        <h3>{{ item.title }}</h3>
+      </a>
+    </li>
   }
 </ul>

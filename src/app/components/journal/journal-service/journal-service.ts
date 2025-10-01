@@ -19,7 +19,7 @@ export class JournalService {
       throw new Error('Kunde inte hämta journaler');
     }
 
-    this.journalEntries = (await res.json()).map(this.normalize);
+    this.journalEntries = ((await res.json()) as any[]).map((raw) => this.normalize(raw));
     return this.journalEntries;
   }
 
@@ -46,6 +46,10 @@ export class JournalService {
 
   getEntryById(id: string): JournalEntry | undefined {
     return this.journalEntries.find((entry) => entry.id === id);
+  }
+
+  clearEntries() {
+    this.journalEntries = [];
   }
 
   private normalize(raw: any): JournalEntry {
