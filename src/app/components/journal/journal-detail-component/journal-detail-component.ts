@@ -18,8 +18,8 @@ export class JournalDetailComponent {
 
   //visar endast detaljsida om id finns
   constructor(route: ActivatedRoute, journalService: JournalService) {
-    const id = Number(route.snapshot.paramMap.get('id'));
-    if (Number.isNaN(id)) {
+    const id = String(route.snapshot.paramMap.get('id'));
+    if (!id) {
       this.notFound = true;
       return;
     }

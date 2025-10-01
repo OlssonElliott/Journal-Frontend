@@ -11,5 +11,7 @@
 
   <button type="submit" [disabled]="loginForm.invalid">Logga in</button>
 
-  <p *ngIf="error">{{ error }}</p>
+  @if (error) {
+    <p>{{ error }}</p>
+  }
 </form>

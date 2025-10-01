@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
+import { LoginResponse } from '../models/LoginResponse';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private loggedIn = false;
+  private currentUser: LoginResponse | null = null;
   private baseURL = import.meta.env['VITE_API_BASE_URL'] ?? 'http://localhost:8080';
 
   async login(username: string, password: string) {
@@ -13,15 +14,21 @@ export class AuthService {
       body: JSON.stringify({ username, password }),
     });
 
-    this.loggedIn = res.ok;
-    return this.loggedIn;
+    if (!res.ok) return false;
+
+    this.currentUser = (await res.json()) as LoginResponse;
+    return true;
+  }
+
+  getUserId(): number | undefined {
+    return this.currentUser?.userId;
   }
 
   logout() {
-    this.loggedIn = false;
+    this.currentUser = null;
   }
 
-  isLoggedIn() {
-    return this.loggedIn;
+  isLoggedIn(): boolean {
+    return !!this.currentUser;
   }
 }
