@@ -28,17 +28,30 @@
   <br /><br />
 
   <input type="text" [(ngModel)]="journalEntry" name="journalEntry" />
-  <button type="submit">Submit</button>
+  <button type="submit" [disabled]="loading">Submit</button>
 </form>
 
-<br />
+<section>
+  <h3>Filtrera efter datum</h3>
+  <label>
+    Från
+    <input type="date" [(ngModel)]="filterStart" (change)="applyDateFilter()" />
+  </label>
+  <label>
+    Till
+    <input type="date" [(ngModel)]="filterEnd" (change)="applyDateFilter()" />
+  </label>
+  <button type="button" (click)="clearFilter()">Rensa filter</button>
+</section>
 
 <ul>
-  @for (item of JournalsList; track item.id) {
+  @for (item of filteredEntries; track item.id) {
     <li>
       <a [routerLink]="['/journal', item.id]">
         <h3>{{ item.title }}</h3>
       </a>
+      <p>{{ item.content }}</p>
+      <p>{{ item.createdAt | date: 'yyyy-MM-dd HH:mm' }}</p>
     </li>
   }
 </ul>

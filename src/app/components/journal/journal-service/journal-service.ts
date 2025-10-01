@@ -19,7 +19,8 @@ export class JournalService {
       throw new Error('Kunde inte hämta journaler');
     }
 
-    this.journalEntries = ((await res.json()) as any[]).map((raw) => this.normalize(raw));
+    const payload = (await res.json()) as any[];
+    this.journalEntries = this.sortEntries(payload.map((raw) => this.normalize(raw)));
     return this.journalEntries;
   }
 
@@ -36,7 +37,7 @@ export class JournalService {
     });
     if (!res.ok) throw new Error('Kunde inte spara journal');
     const entry = this.normalize(await res.json());
-    this.journalEntries = [...this.journalEntries, entry];
+    this.journalEntries = this.sortEntries([...this.journalEntries, entry]);
     return entry;
   }
 
@@ -50,6 +51,10 @@ export class JournalService {
 
   clearEntries() {
     this.journalEntries = [];
+  }
+
+  private sortEntries(entries: JournalEntry[]): JournalEntry[] {
+    return [...entries].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
 
   private normalize(raw: any): JournalEntry {
