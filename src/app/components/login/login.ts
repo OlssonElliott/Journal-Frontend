@@ -32,7 +32,10 @@ export class Login {
     this.cdr.markForCheck();
 
     if (this.isRegistering) {
-      if (!this.registerData.username || !this.registerData.email || !this.registerData.password) {
+      const username = this.registerData.username.trim();
+      const email = this.registerData.email.trim();
+
+      if (!username || !email || !this.registerData.password) {
         this.error = 'Fyll i alla fält för att skapa konto.';
         this.loading = false;
         this.cdr.markForCheck();
@@ -47,8 +50,8 @@ export class Login {
       }
 
       const created = await this.auth.register({
-        username: this.registerData.username.trim(),
-        email: this.registerData.email.trim(),
+        username,
+        email,
         password: this.registerData.password,
       });
 
@@ -59,7 +62,7 @@ export class Login {
         return;
       }
 
-      const loggedIn = await this.auth.login(this.registerData.username, this.registerData.password);
+      const loggedIn = await this.auth.login(username, this.registerData.password);
       if (loggedIn) {
         await this.router.navigate(['/journal']);
         this.loading = false;
@@ -70,14 +73,15 @@ export class Login {
       this.error = 'Kontot skapades men inloggningen misslyckades. Försök logga in.';
       this.loading = false;
       this.isRegistering = false;
-      this.credentials = { username: this.registerData.username, password: '' };
+      this.credentials = { username, password: '' };
       this.registerData = { username: '', email: '', password: '', confirmPassword: '' };
       form.resetForm({ username: this.credentials.username });
       this.cdr.markForCheck();
       return;
     }
 
-    const ok = await this.auth.login(this.credentials.username, this.credentials.password);
+    const username = this.credentials.username.trim();
+    const ok = await this.auth.login(username, this.credentials.password);
     if (ok) {
       await this.router.navigate(['/journal']);
     } else {
