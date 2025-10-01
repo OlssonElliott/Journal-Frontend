@@ -32,7 +32,7 @@
 <br />
 
 <ul>
-  @for (item of tempJournalList; track item.id) {
+  @for (item of JournalsList; track item.id) {
   <li>
     <a [routerLink]="['/journal', item.id]">
       <h3>{{ item.title }}</h3>

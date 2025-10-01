@@ -1,7 +1,7 @@
 <p>journal-detail-component works!</p>
 @if (notFound) {
 <p>Inlägget kunde inte hittas.</p>
-<a routerLink="/">Tillbaka</a>
+<a routerLink="/journal">Tillbaka</a>
 } @else if (journalEntry) {
 <article>
   <h2>{{ journalEntry.title }}</h2>
@@ -9,5 +9,5 @@
   <p>{{ journalEntry.content }}</p>
   <p>Känsla: {{ journalEntry.emotionalState }}</p>
 </article>
-<a routerLink="/">Tillbaka till listan</a>
+<a routerLink="/journal">Tillbaka till listan</a>
 }

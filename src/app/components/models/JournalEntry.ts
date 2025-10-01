@@ -1,7 +1,8 @@
 export type JournalEntry = {
-  id: number;
-  title: string;
   content: string;
-  emotionalState: string;
   createdAt: Date;
+  emotionalState: string;
+  id: string;
+  title: string;
+  userId: string;
 };
