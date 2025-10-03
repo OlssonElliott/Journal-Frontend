@@ -116,6 +116,7 @@ export class JournalNotes {
   }
 
   // Räknar hur stor andel varje känslotagg står för i den filtrerade listan.
+  // Denna uträkning tog jag hjälp av ChatGPT för att få till. Jag förstod inte hur jag skulle få ihop procentomvandlingen osv själv.
   private calculateStats(entries: JournalEntry[]): EmotionStat[] {
     if (!entries.length) return [];
 
