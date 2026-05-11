@@ -10,8 +10,8 @@ https://github.com/OlssonElliott/Journal-Backend
 ## Kom igång
 
 ```bash
-pnpm install
-pnpm start
+npm install
+npm start
 ```
 
 Servern är sedan igång på `http://localhost:4200/`.
